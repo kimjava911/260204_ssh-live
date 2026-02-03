@@ -37,3 +37,31 @@ GitHub 저장소의 `Settings > Secrets and variables > Actions`에 다음 항�
 docker-compose up --build
 ```
 접속 주소: `http://localhost`
+
+---
+
+```sh
+# EC2 인스턴스의 퍼블릭 DNS 주소 설정
+export PUBLIC_DNS=<public dns>
+
+# 키 파일 권한 변경 (보안상 필수, 읽기 권한만 부여)
+chmod 400 *.pem
+
+# SSH 접속
+ssh -i $(ls *.pem) ubuntu@${PUBLIC_DNS}
+```
+
+```sh
+# 패키지 목록 업데이트
+sudo apt update
+
+# Docker 설치 스크립트 다운로드 및 실행
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# 현재 사용자(ubuntu)를 docker 그룹에 추가 (sudo 없이 docker 명령어 사용 위함)
+sudo usermod -aG docker $USER
+
+# 그룹 변경 사항 적용을 위해 로그아웃 후 재접속 필요 (또는 exit 후 다시 ssh 접속)
+exit
+```
