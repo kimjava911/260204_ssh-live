@@ -5,8 +5,7 @@ WORKDIR /home/gradle/src
 RUN gradle build --no-daemon -x test
 
 # Run stage
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-jammy
 EXPOSE 8080
-RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/spring-boot-application.jar
-ENTRYPOINT ["java", "-jar", "/app/spring-boot-application.jar"]
+COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
